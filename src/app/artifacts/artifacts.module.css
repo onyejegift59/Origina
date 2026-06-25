@@ -1,0 +1,146 @@
+.page {
+  margin-left: var(--sidebar-width, 280px);
+  min-height: 100vh;
+  padding: 32px;
+  transition: margin-left 200ms ease;
+}
+
+.mobileHeader {
+  display: none;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: var(--headline-small-font-size);
+  font-weight: var(--headline-small-font-weight);
+  color: var(--on-surface);
+  line-height: var(--headline-small-line-height);
+  margin-bottom: 32px;
+}
+
+.state {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--on-surface-variant);
+  font-size: var(--body-medium-font-size);
+}
+
+.emptyIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--surface-container-high);
+  margin: 0 auto 16px;
+}
+
+.emptyTitle {
+  font-size: var(--title-medium-font-size);
+  font-weight: 600;
+  color: var(--on-surface);
+  margin-bottom: 8px;
+}
+
+.emptyDesc {
+  font-size: var(--body-medium-font-size);
+  color: var(--on-surface-variant);
+}
+
+.group {
+  margin-bottom: 40px;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.groupTitle {
+  font-size: var(--title-small-font-size);
+  font-weight: 600;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.projectLink {
+  font-size: var(--label-small-font-size);
+  font-weight: var(--label-small-font-weight);
+  color: var(--primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  transition: background 150ms;
+}
+
+.projectLink:hover {
+  background: var(--primary-container);
+}
+
+.artifactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .page {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .menuBtn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--on-surface-variant);
+    cursor: pointer;
+    z-index: 10;
+    transition: background 150ms, color 150ms;
+  }
+
+  .menuBtn:hover {
+    background: var(--surface-container-high);
+    color: var(--on-surface);
+  }
+
+  .title {
+    font-size: var(--title-large-font-size);
+  }
+
+  .artifactGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .skeletonGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

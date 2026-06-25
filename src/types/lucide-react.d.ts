@@ -1,0 +1,54 @@
+declare module 'lucide-react' {
+  import { FC, SVGProps } from 'react';
+
+  type Icon = FC<SVGProps<SVGSVGElement> & { size?: number }>;
+
+  export const AlertTriangle: Icon;
+  export const ArrowUp: Icon;
+  export const Bell: Icon;
+  export const BookOpen: Icon;
+  export const Bot: Icon;
+  export const Bug: Icon;
+  export const Check: Icon;
+  export const ChevronDown: Icon;
+  export const ChevronLeft: Icon;
+  export const ChevronRight: Icon;
+  export const ChevronUp: Icon;
+  export const Clock: Icon;
+  export const Cog: Icon;
+  export const Copy: Icon;
+  export const Crown: Icon;
+  export const Download: Icon;
+  export const ExternalLink: Icon;
+  export const EyeIcon: Icon;
+  export const EyeOffIcon: Icon;
+  export const FileText: Icon;
+  export const FolderKanban: Icon;
+  export const HelpCircle: Icon;
+  export const History: Icon;
+  export const LayoutDashboard: Icon;
+  export const LayoutTemplate: Icon;
+  export const Layers: Icon;
+  export const LogOut: Icon;
+  export const Mail: Icon;
+  export const Menu: Icon;
+  export const MessageSquare: Icon;
+  export const Monitor: Icon;
+  export const Moon: Icon;
+  export const PanelLeft: Icon;
+  export const PanelLeftOpen: Icon;
+  export const Plus: Icon;
+  export const RefreshCw: Icon;
+  export const Shield: Icon;
+  export const Sparkles: Icon;
+  export const Square: Icon;
+  export const Sun: Icon;
+  export const Target: Icon;
+  export const Trash2: Icon;
+  export const User: Icon;
+  export const X: Icon;
+  export const Compass: Icon;
+  export const Activity: Icon;
+  export const ArrowRight: Icon;
+  export const CheckCircle2: Icon;
+}

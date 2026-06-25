@@ -1,0 +1,119 @@
+.cursor {
+  animation: blink 1s step-end infinite;
+  color: var(--on-surface);
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.userRow {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 24px;
+  max-width: 768px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.userBubble {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: 18px 18px 4px 18px;
+  padding: 10px 16px;
+  max-width: 75%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.userText {
+  font-size: var(--body-medium-font-size);
+  line-height: var(--body-medium-line-height);
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding-right: 4px;
+}
+
+.copyBtn {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  color: var(--on-primary);
+  opacity: 0.4;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  margin-top: 4px;
+  border-radius: 4px;
+  transition: opacity 150ms, background 150ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copyBtn:hover,
+.copyBtn:focus-visible {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.assistantRow {
+  display: flex;
+  justify-content: flex-start;
+  padding: 8px 24px;
+  max-width: 768px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.assistantBubble {
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  border-radius: 18px 18px 18px 4px;
+  padding: 10px 16px;
+  max-width: 75%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.assistantText {
+  font-size: var(--body-medium-font-size);
+  line-height: var(--body-medium-line-height);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.assistantCopyBtn {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  color: var(--on-surface-variant);
+  opacity: 0.4;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  margin-top: 4px;
+  border-radius: 4px;
+  transition: opacity 150ms, background 150ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assistantCopyBtn:hover,
+.assistantCopyBtn:focus-visible {
+  opacity: 1;
+  background: var(--surface-container-high);
+}
+
+@media (max-width: 768px) {
+  .userRow, .assistantRow {
+    padding: 6px 16px;
+  }
+
+  .userBubble, .assistantBubble {
+    max-width: 85%;
+  }
+}

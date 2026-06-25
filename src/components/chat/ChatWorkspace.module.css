@@ -1,0 +1,317 @@
+.workspace {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  margin-left: var(--sidebar-width, 280px);
+  background: var(--surface);
+  transition: margin-left 200ms ease;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.skeletonConversation {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 768px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.skeletonMessage {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.skeletonMessageUser {
+  flex-direction: row-reverse;
+}
+
+.skeletonMessageAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  background: linear-gradient(
+    90deg,
+    var(--surface-container-high) 25%,
+    var(--surface-container) 37%,
+    var(--surface-container-high) 63%
+  );
+  background-size: 200px 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+.skeletonMessageContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--surface-container-low);
+  border-radius: var(--radius-lg);
+  max-width: 70%;
+}
+
+.skeletonMessageUser .skeletonMessageContent {
+  background: var(--primary-container);
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+  padding: 24px;
+  text-align: center;
+  font-size: var(--body-medium-font-size);
+  color: var(--error);
+}
+
+.retryBtn {
+  padding: 8px 20px;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--label-large-font-size);
+  font-weight: var(--label-large-font-weight);
+  transition: opacity 150ms;
+}
+
+.retryBtn:hover {
+  opacity: 0.9;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 24px;
+}
+
+.emptyContent {
+  text-align: center;
+  max-width: 480px;
+}
+
+.emptyTitle {
+  font-size: var(--headline-small-font-size);
+  font-weight: var(--headline-small-font-weight);
+  color: var(--on-surface);
+  margin-bottom: 8px;
+}
+
+.emptyText {
+  font-size: var(--body-medium-font-size);
+  color: var(--on-surface-variant);
+  margin-bottom: 24px;
+  line-height: var(--body-medium-line-height);
+}
+
+.emptyPrompt {
+  font-size: var(--title-medium-font-size);
+  font-weight: var(--title-medium-font-weight);
+  color: var(--on-surface);
+}
+
+.welcome {
+  text-align: center;
+  padding: 40px 24px 24px;
+  max-width: 768px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.welcomeTitle {
+  font-size: var(--title-medium-font-size);
+  font-weight: var(--title-medium-font-weight);
+  color: var(--on-surface);
+  margin-bottom: 4px;
+}
+
+.welcomeIdea {
+  font-size: var(--body-medium-font-size);
+  color: var(--on-surface-variant);
+}
+
+.artifactSection {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.generatingIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  color: var(--on-surface-variant);
+  font-size: var(--body-medium-font-size);
+}
+
+.spinning {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--outline-variant);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.artifactSectionLabel {
+  display: block;
+  font-size: var(--label-small-font-size);
+  font-weight: var(--label-small-font-weight);
+  color: var(--on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 4px;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+.artifactRow {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline-variant) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.artifactRow::-webkit-scrollbar {
+  height: 6px;
+}
+
+.artifactRow::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.artifactRow::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 3px;
+}
+
+.artifactRowItem {
+  flex: 0 0 300px;
+  min-width: 0;
+}
+
+.artifactActions {
+  max-width: 768px;
+  margin: 24px auto;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.artifactLabel {
+  display: block;
+  font-size: var(--label-small-font-size);
+  color: var(--on-surface-variant);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.artifactButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.artifactBtn {
+  padding: 8px 14px;
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-sm);
+  background: none;
+  font-size: var(--label-small-font-size);
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  transition: border-color 150ms, color 150ms, background 150ms;
+  min-height: 36px;
+}
+
+.artifactBtn:hover {
+  border-color: var(--primary);
+  color: var(--on-surface);
+  background: var(--surface-container-low);
+}
+
+.artifactBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mobileHeader {
+  display: none;
+}
+
+.menuBtn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  transition: background 150ms, color 150ms;
+}
+
+.menuBtn:hover {
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+}
+
+@media (max-width: 768px) {
+  .workspace {
+    margin-left: 0;
+  }
+
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--outline-variant);
+    flex-shrink: 0;
+  }
+
+  .messages {
+    padding: 16px 0;
+  }
+
+  .welcome {
+    padding: 24px 16px 16px;
+  }
+
+  .artifactSection {
+    padding: 0 16px;
+  }
+
+  .artifactActions {
+    padding: 0 16px;
+  }
+}

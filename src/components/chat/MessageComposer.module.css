@@ -1,0 +1,82 @@
+.composer {
+  padding: 8px 24px 24px;
+  background: var(--surface);
+}
+
+.container {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 768px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-lg);
+  padding: 12px 12px 12px 16px;
+  transition: border-color 150ms, box-shadow 150ms;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.container:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.textarea {
+  flex: 1;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: var(--body-medium-font-size);
+  color: var(--on-surface);
+  resize: none;
+  max-height: 200px;
+  line-height: 1.5;
+  outline: none;
+  font-family: inherit;
+}
+
+.textarea::placeholder {
+  color: var(--on-surface-variant);
+}
+
+.sendBtn,
+.stopBtn {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 150ms, background 150ms;
+}
+
+.sendBtn {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.sendBtn:hover {
+  opacity: 0.85;
+}
+
+.sendBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+}
+
+.stopBtn {
+  background: var(--error);
+  color: var(--on-error);
+}
+
+.stopBtn:hover {
+  background: var(--error-container);
+  color: var(--error);
+}
+

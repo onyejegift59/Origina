@@ -1,0 +1,451 @@
+/* src/app/page.module.css */
+
+.wrapper {
+  background-color: var(--background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px; /* Creates a framed container layout like the reference tablet design */
+  font-family: var(--font-family-primary);
+  color: var(--on-background);
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 12px;
+  }
+}
+
+/* ==========================================
+   Hero Section
+   ========================================== */
+.heroContainer {
+  position: relative;
+  width: 100%;
+  min-height: 75vh;
+  min-height: 720px;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+.heroBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.heroImage {
+  object-fit: cover;
+  object-position: center 25%;
+  filter: brightness(0.9);
+}
+
+.heroOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Dark left-to-right gradient to overlay readable text on top of the image */
+  background: linear-gradient(
+    105deg,
+    rgba(20, 26, 20, 0.95) 0%,
+    rgba(20, 26, 20, 0.85) 35%,
+    rgba(20, 26, 20, 0.5) 70%,
+    rgba(20, 26, 20, 0.2) 100%
+  );
+  z-index: 2;
+}
+
+/* ==========================================
+   Overlay Header / Navigation
+   ========================================== */
+.header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px 48px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 20px 24px;
+  }
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.loginLink {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--label-large-font-size);
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+}
+
+.loginLink:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.signupBtn {
+  background-color: #ffffff;
+  color: #121212;
+  font-size: var(--label-large-font-size);
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid #ffffff;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.signupBtn:hover {
+  background-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================
+   Hero Content Area
+   ========================================== */
+.heroContent {
+  position: relative;
+  z-index: 10;
+  margin-top: auto;
+  max-width: 800px;
+  padding: 64px 80px 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+@media (max-width: 768px) {
+  .heroContent {
+    padding: 40px 24px 60px;
+    gap: 20px;
+  }
+}
+
+.tagline {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--label-small-font-size);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.headline {
+  color: #ffffff;
+  font-size: var(--display-medium-font-size);
+  font-weight: var(--display-medium-font-weight);
+  line-height: var(--display-medium-line-height);
+  letter-spacing: var(--display-medium-letter-spacing);
+}
+
+@media (max-width: 768px) {
+  .headline {
+    font-size: var(--headline-large-font-size);
+    line-height: var(--headline-large-line-height);
+  }
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--body-large-font-size);
+  line-height: var(--body-large-line-height);
+  max-width: 620px;
+}
+
+@media (max-width: 768px) {
+  .description {
+    font-size: var(--body-medium-font-size);
+    line-height: var(--body-medium-line-height);
+  }
+}
+
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+@media (max-width: 480px) {
+  .ctaGroup {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+.primaryCta {
+  background-color: var(--primary); /* Matte Olive */
+  color: #ffffff;
+  font-size: var(--label-large-font-size);
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--primary);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(105, 115, 95, 0.15);
+}
+
+.primaryCta:hover {
+  background-color: hsl(105 9% 25%);
+  border-color: hsl(105 9% 25%);
+  transform: translateY(-1px);
+}
+
+.secondaryCta {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  color: #ffffff;
+  font-size: var(--label-large-font-size);
+  font-weight: 500;
+  padding: 14px 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+.secondaryCta:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+/* ==========================================
+   Below the Hero Container
+   ========================================== */
+.mainContent {
+  width: 100%;
+  max-width: var(--layout-max-width, 1200px);
+  margin: 0 auto;
+  padding: 64px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 96px; /* High breathing room editorial layout */
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 40px 16px;
+    gap: 64px;
+  }
+}
+
+/* ==========================================
+   How It Works Section
+   ========================================== */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+}
+
+.sectionSubtitle {
+  color: var(--primary);
+  font-size: var(--label-small-font-size);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sectionTitle {
+  font-size: var(--headline-large-font-size);
+  font-weight: var(--headline-large-font-weight);
+  color: var(--on-background);
+  letter-spacing: var(--headline-large-letter-spacing);
+}
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 768px) {
+  .stepsGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.stepCard {
+  background-color: var(--surface-container-low);
+  padding: 36px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--outline-variant);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: all 0.25s ease;
+}
+
+.stepCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--outline);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.stepTitle {
+  font-size: var(--title-large-font-size);
+  font-weight: 600;
+  color: var(--on-background);
+}
+
+.stepText {
+  color: var(--on-surface-variant);
+  font-size: var(--body-medium-font-size);
+  line-height: var(--body-medium-line-height);
+}
+
+/* ==========================================
+   Final CTA Section
+   ========================================== */
+.finalCtaContainer {
+  background-color: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-2xl);
+  padding: 80px 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .finalCtaContainer {
+    padding: 48px 24px;
+  }
+}
+
+.finalCtaTitle {
+  font-size: var(--display-small-font-size);
+  font-weight: var(--display-small-font-weight);
+  color: var(--on-background);
+  letter-spacing: var(--display-small-letter-spacing);
+  max-width: 600px;
+  line-height: 1.2;
+}
+
+.finalCtaText {
+  font-size: var(--body-large-font-size);
+  color: var(--on-surface-variant);
+  max-width: 500px;
+  line-height: var(--body-large-line-height);
+  margin-bottom: 8px;
+}
+
+.finalCtaButtons {
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .finalCtaButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.finalPrimaryCta {
+  background-color: var(--primary);
+  color: #ffffff;
+  font-size: var(--label-large-font-size);
+  font-weight: 600;
+  padding: 14px 36px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--primary);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.finalPrimaryCta:hover {
+  background-color: hsl(105 9% 25%);
+  border-color: hsl(105 9% 25%);
+}
+
+.finalSecondaryCta {
+  background-color: transparent;
+  color: var(--on-background);
+  font-size: var(--label-large-font-size);
+  font-weight: 500;
+  padding: 14px 36px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--outline);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.finalSecondaryCta:hover {
+  background-color: var(--surface-container-high);
+}
+
+/* ==========================================
+   Footer
+   ========================================== */
+.footer {
+  border-top: 1px solid var(--outline-variant);
+  padding: 32px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--label-small-font-size);
+  color: var(--on-surface-variant);
+  margin-top: 24px;
+}
+
+@media (max-width: 480px) {
+  .footer {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
+.footerLogo {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
