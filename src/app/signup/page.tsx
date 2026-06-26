@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { EyeIcon, EyeOffIcon, Check, X } from 'lucide-react';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import formStyles from '../login/login.module.css';
 import styles from './signup.module.css';
 import { validateEmail, validatePassword, getPasswordStrength } from '@/lib/validation';
@@ -195,24 +195,26 @@ export default function SignupPage() {
               )}
             </div>
 
-            <div className={formStyles.field}>
-              <label htmlFor="confirm-password" className={formStyles.label}>Confirm Password</label>
-              <input
-                id="confirm-password"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                onBlur={() => handleBlur('confirm')}
-                className={`${formStyles.input} ${confirmError ? formStyles.inputError : ''}`}
-                autoComplete="new-password"
-                aria-required="true"
-                aria-invalid={confirmError ? 'true' : undefined}
-                aria-describedby={confirmError ? 'confirm-error' : undefined}
-              />
-              {confirmError && (
-                <p id="confirm-error" className={formStyles.fieldError} role="alert">{confirmError}</p>
-              )}
-            </div>
+            {password.length > 0 && (
+              <div className={formStyles.field}>
+                <label htmlFor="confirm-password" className={formStyles.label}>Confirm Password</label>
+                <input
+                  id="confirm-password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onBlur={() => handleBlur('confirm')}
+                  className={`${formStyles.input} ${confirmError ? formStyles.inputError : ''}`}
+                  autoComplete="new-password"
+                  aria-required="true"
+                  aria-invalid={confirmError ? 'true' : undefined}
+                  aria-describedby={confirmError ? 'confirm-error' : undefined}
+                />
+                {confirmError && (
+                  <p id="confirm-error" className={formStyles.fieldError} role="alert">{confirmError}</p>
+                )}
+              </div>
+            )}
 
             {serverError && <p className={formStyles.error} role="alert">{serverError}</p>}
 

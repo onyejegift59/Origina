@@ -12,12 +12,15 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.onAuthStateChange((event) => {
-      if (event !== 'PASSWORD_RECOVERY') {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
         router.push('/login');
+      } else {
+        setReady(true);
       }
     });
   }, [router]);
@@ -53,6 +56,8 @@ export default function ResetPasswordPage() {
 
   const strength = getPasswordStrength(password);
 
+  if (!ready) return null;
+
   return (
     <div style={{ display: 'flex', minHeight: '100dvh', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
       <div style={{ width: '100%', maxWidth: '400px' }}>
@@ -87,19 +92,21 @@ export default function ResetPasswordPage() {
               )}
             </div>
 
-            <div style={{ marginBottom: '24px' }}>
-              <label htmlFor="confirm-password" style={{ display: 'block', fontSize: '14px', fontWeight: 500, marginBottom: '6px' }}>
-                Confirm new password
-              </label>
-              <input
-                id="confirm-password"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--outline)', borderRadius: '8px', fontSize: '14px', background: 'var(--surface)', color: 'var(--on-surface)' }}
-                required
-              />
-            </div>
+            {password.length > 0 && (
+              <div style={{ marginBottom: '24px' }}>
+                <label htmlFor="confirm-password" style={{ display: 'block', fontSize: '14px', fontWeight: 500, marginBottom: '6px' }}>
+                  Confirm new password
+                </label>
+                <input
+                  id="confirm-password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--outline)', borderRadius: '8px', fontSize: '14px', background: 'var(--surface)', color: 'var(--on-surface)' }}
+                  required
+                />
+              </div>
+            )}
 
             {error && (
               <div style={{ padding: '12px', background: 'var(--error-container)', borderRadius: '8px', color: 'var(--on-error-container)', fontSize: '14px', marginBottom: '16px' }} role="alert">
