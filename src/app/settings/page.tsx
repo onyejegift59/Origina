@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { Skeleton, SkeletonAvatar } from '@/components/ui/Skeleton';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { applyTheme } from '@/lib/theme';
 import styles from './settings.module.css';
 
 interface SettingsState {
@@ -42,7 +43,7 @@ interface SettingsState {
   autoGenerateArtifacts: boolean;
   autoSave: boolean;
   projectOrganization: 'list' | 'grid';
-  preferredFormat: 'pdf' | 'docx' | 'md' | 'pptx';
+  preferredFormat: 'pdf' | 'docx' | 'markdown' | 'pptx';
 }
 
 type SectionId =
@@ -90,7 +91,7 @@ const DENSITY_OPTIONS = [
 const FORMAT_OPTIONS = [
   { value: 'pdf', label: 'PDF' },
   { value: 'docx', label: 'DOCX' },
-  { value: 'md', label: 'Markdown' },
+  { value: 'markdown', label: 'Markdown' },
   { value: 'pptx', label: 'PPTX' },
 ] as const;
 
@@ -140,16 +141,6 @@ function saveSettings(settings: SettingsState) {
   } catch { /* ignore */ }
 }
 
-function applyTheme(theme: SettingsState['theme']) {
-  const root = document.documentElement;
-  if (theme === 'system') {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    root.dataset.theme = prefersDark ? 'dark' : 'light';
-  } else {
-    root.dataset.theme = theme;
-  }
-}
-
 export default function SettingsPage() {
   const router = useRouter();
   const [settings, setSettings] = useState<SettingsState>(loadSettings);
@@ -176,6 +167,7 @@ export default function SettingsPage() {
     }
     const meta = authUser.user_metadata;
     const provider = authUser.app_metadata?.provider || 'email';
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUser({
       name: meta?.full_name || meta?.name || authUser.email?.split('@')[0] || 'User',
       email: authUser.email || '',

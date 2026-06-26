@@ -205,7 +205,7 @@ function renderMvpScope(content: Record<string, unknown>) {
       )}
       {m.excludedFeatures?.length > 0 && (
         <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>Won't Have (v1)</h3>
+          <h3 className={styles.sectionTitle}>Won&apos;t Have (v1)</h3>
           <ul className={styles.sectionList}>
             {m.excludedFeatures.map((f, i) => <li key={i} className={styles.sectionListItem}>{f}</li>)}
           </ul>

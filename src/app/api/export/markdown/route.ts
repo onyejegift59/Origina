@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     return acc;
   }, {} as Record<string, unknown>);
 
-  const markdown = generateMarkdown(project, artifactMap);
+  const markdown = generateMarkdown(project, artifactMap as Record<string, Record<string, unknown>>);
 
   const fileName = safeFileName(project.name, 'md');
 
@@ -51,13 +51,13 @@ export async function POST(request: Request) {
   });
 }
 
-function generateMarkdown(project: any, artifacts: Record<string, any>): string {
+function generateMarkdown(project: { name: string; idea: string; problem_description?: string | null }, artifacts: Record<string, Record<string, unknown>>): string {
   let md = `# ${project.name}\n\n`;
   md += `**Idea:** ${project.idea}\n\n`;
   md += `**Problem:** ${project.problem_description || 'Not specified'}\n\n`;
   md += `---\n\n`;
 
-  const analysis = artifacts['startup_analysis'];
+  const analysis = artifacts['startup_analysis'] as { problemStatement?: string; targetAudience?: string; valueProposition?: string; marketOpportunity?: string; risks?: string[]; recommendations?: string[] } | undefined;
   if (analysis) {
     md += `## Startup Analysis\n\n`;
     md += `### Problem Statement\n${analysis.problemStatement || ''}\n\n`;
@@ -72,7 +72,7 @@ function generateMarkdown(project: any, artifacts: Record<string, any>): string 
     }
   }
 
-  const personas = artifacts['personas'];
+  const personas = artifacts['personas'] as { personas?: Array<{ name?: string; role?: string; goals?: string[]; painPoints?: string[]; motivations?: string[] }> } | undefined;
   if (personas?.personas?.length) {
     md += `## User Personas\n\n`;
     for (const p of personas.personas) {
@@ -83,7 +83,7 @@ function generateMarkdown(project: any, artifacts: Record<string, any>): string 
     }
   }
 
-  const mvp = artifacts['mvp_scope'];
+  const mvp = artifacts['mvp_scope'] as { mustHave?: string[]; shouldHave?: string[]; couldHave?: string[]; excludedFeatures?: string[] } | undefined;
   if (mvp) {
     md += `## MVP Scope\n\n`;
     if (mvp.mustHave?.length) md += `### Must Have\n${mvp.mustHave.map((f: string) => `- ${f}`).join('\n')}\n\n`;
@@ -92,7 +92,7 @@ function generateMarkdown(project: any, artifacts: Record<string, any>): string 
     if (mvp.excludedFeatures?.length) md += `### Won't Have (v1)\n${mvp.excludedFeatures.map((f: string) => `- ${f}`).join('\n')}\n\n`;
   }
 
-  const roadmap = artifacts['roadmap'];
+  const roadmap = artifacts['roadmap'] as { phase1?: string[]; phase2?: string[]; phase3?: string[] } | undefined;
   if (roadmap) {
     md += `## Product Roadmap\n\n`;
     if (roadmap.phase1?.length) md += `### Phase 1: Core MVP\n${roadmap.phase1.map((i: string) => `- ${i}`).join('\n')}\n\n`;
@@ -100,7 +100,7 @@ function generateMarkdown(project: any, artifacts: Record<string, any>): string 
     if (roadmap.phase3?.length) md += `### Phase 3: Growth\n${roadmap.phase3.map((i: string) => `- ${i}`).join('\n')}\n\n`;
   }
 
-  const health = artifacts['health_score'];
+  const health = artifacts['health_score'] as { score?: number; strengths?: string[]; risks?: string[]; recommendations?: string[] } | undefined;
   if (health) {
     md += `## Health Score\n\n`;
     md += `**Score:** ${health.score}/100\n\n`;

@@ -8,6 +8,7 @@ import {
 import { Tooltip } from '@/components/ui/Tooltip';
 import { renderArtifact, getArtifactLabel, renderArtifactPreview } from './ArtifactRenderers';
 import { formatContentForCopy } from '@/lib/format';
+import { useClipboard } from '@/hooks/useClipboard';
 import styles from './ArtifactCard.module.css';
 import type { ArtifactType } from '@/types';
 
@@ -31,9 +32,8 @@ export const ArtifactCard = memo(function ArtifactCard({
   const [openModal, setOpenModal] = useState(false);
   const [refineInput, setRefineInput] = useState('');
   const [exportOpen, setExportOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
-
   const label = getArtifactLabel(type);
+  const { copied, copy } = useClipboard();
 
   useEffect(() => {
     if (openModal) {
@@ -46,14 +46,8 @@ export const ArtifactCard = memo(function ArtifactCard({
   }, [openModal]);
 
   const handleCopy = async () => {
-    try {
-      const text = formatContentForCopy(content, label);
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // clipboard not available
-    }
+    const text = formatContentForCopy(content, label);
+    await copy(text);
   };
 
   const isChat = variant === 'chat';
@@ -111,13 +105,13 @@ export const ArtifactCard = memo(function ArtifactCard({
         ) : (
           <div
             className={styles.previewArea}
-            onClick={() => onCardClick ? onCardClick() : setExpanded(true)}
+            onClick={() => { if (onCardClick) onCardClick(); else setExpanded(true); }}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                onCardClick ? onCardClick() : setExpanded(true);
+                if (onCardClick) onCardClick(); else setExpanded(true);
               }
             }}
             aria-label={onCardClick ? 'Open artifact' : 'Expand artifact'}

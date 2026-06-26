@@ -201,20 +201,6 @@ export async function addConversationMessage(
   return data;
 }
 
-export async function getUserExports(
-  projectId: string,
-  userId: string
-): Promise<Export[]> {
-  const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
-    .from('exports')
-    .select('*')
-    .eq('project_id', projectId)
-    .order('created_at', { ascending: false });
-
-  return data ?? [];
-}
-
 export async function createExportRecord(
   projectId: string,
   format: string,

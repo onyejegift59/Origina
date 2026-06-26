@@ -45,7 +45,7 @@ export interface AiConversation {
 export interface Export {
   id: string;
   project_id: string;
-  format: 'pdf' | 'docx' | 'md' | 'pptx';
+  format: 'pdf' | 'docx' | 'markdown' | 'pptx';
   storage_url: string;
   created_at: string;
 }

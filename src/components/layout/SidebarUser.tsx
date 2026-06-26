@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { LogOut } from 'lucide-react';
 import { Tooltip } from '@/components/ui/Tooltip';
@@ -12,26 +12,22 @@ interface SidebarUserProps {
 }
 
 export function SidebarUser({ collapsed, onLogout }: SidebarUserProps) {
-  const [userName, setUserName] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
   const { user } = useAuth();
 
-  useEffect(() => {
+  const userName = useMemo(() => {
     const meta = user?.user_metadata;
-    if (meta?.full_name) {
-      setUserName(meta.full_name);
-    } else if (meta?.name) {
-      setUserName(meta.name);
-    } else if (user?.email) {
-      setUserName(user.email.split('@')[0]);
-    }
-    if (meta?.avatar_url) {
-      setAvatarUrl(meta.avatar_url);
-    }
+    if (meta?.full_name) return meta.full_name;
+    if (meta?.name) return meta.name;
+    if (user?.email) return user.email.split('@')[0];
+    return '';
+  }, [user]);
+
+  const avatarUrl = useMemo(() => {
+    return user?.user_metadata?.avatar_url || '';
   }, [user]);
 
   const initials = userName
-    ? userName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
+    ? userName.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
     : '?';
 
   return (
@@ -41,6 +37,7 @@ export function SidebarUser({ collapsed, onLogout }: SidebarUserProps) {
           <Tooltip content={userName || 'User'} side="right">
             <button className={styles.avatarCompact} aria-label="User menu">
               {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={avatarUrl} alt="" className={styles.avatarImg} />
               ) : (
                 <span className={styles.avatarText}>{initials}</span>
@@ -58,6 +55,7 @@ export function SidebarUser({ collapsed, onLogout }: SidebarUserProps) {
           <div className={styles.userRow}>
             <div className={styles.avatar}>
               {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={avatarUrl} alt="" className={styles.avatarImg} />
               ) : (
                 <span className={styles.avatarText}>{initials}</span>

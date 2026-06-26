@@ -48,7 +48,7 @@ export async function POST(request: Request) {
   cover.addText(project.name, { x: 1, y: 2, w: 8, h: 1.5, fontSize: 36, color: 'F5F0E8', fontFace: 'Helvetica', bold: true });
   cover.addText('Product Strategy Report', { x: 1, y: 3.5, w: 8, h: 0.8, fontSize: 18, color: 'A8B5A0', fontFace: 'Helvetica' });
 
-  const analysis = artifactMap['startup_analysis'] as any;
+  const analysis = artifactMap['startup_analysis'] as { problemStatement?: string; targetAudience?: string; valueProposition?: string } | undefined;
   if (analysis) {
     const slide = pptx.addSlide();
     slide.background = { color: 'F5F0E8' };
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     slide3.addText(analysis.valueProposition || '', { x: 0.5, y: 1.2, w: 9, h: 1.5, fontSize: 14, color: '333333', fontFace: 'Helvetica' });
   }
 
-  const personas = artifactMap['personas'] as any;
+  const personas = artifactMap['personas'] as { personas?: Array<{ name?: string; role?: string; goals?: string[] }> } | undefined;
   if (personas?.personas) {
     for (const p of personas.personas) {
       const slide = pptx.addSlide();
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const mvp = artifactMap['mvp_scope'] as any;
+  const mvp = artifactMap['mvp_scope'] as { mustHave?: string[] } | undefined;
   if (mvp) {
     const slide = pptx.addSlide();
     slide.background = { color: 'F5F0E8' };
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
     slide.addText(`Must Have:\n${mustHave}`, { x: 0.5, y: 1.2, w: 9, h: 3, fontSize: 12, color: '333333', fontFace: 'Helvetica' });
   }
 
-  const roadmap = artifactMap['roadmap'] as any;
+  const roadmap = artifactMap['roadmap'] as { phase1?: string[]; phase2?: string[]; phase3?: string[] } | undefined;
   if (roadmap) {
     const slide = pptx.addSlide();
     slide.background = { color: 'F5F0E8' };
@@ -97,7 +97,7 @@ export async function POST(request: Request) {
     slide.addText(phases.join('\n\n'), { x: 0.5, y: 1.2, w: 9, h: 4, fontSize: 12, color: '333333', fontFace: 'Helvetica' });
   }
 
-  const health = artifactMap['health_score'] as any;
+  const health = artifactMap['health_score'] as { score?: number; recommendations?: string[] } | undefined;
   if (health) {
     const slide = pptx.addSlide();
     slide.background = { color: '2D3A2D' };

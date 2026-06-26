@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api/client';
 import type { Project, ProjectOutput } from '@/types';
 
@@ -8,25 +8,25 @@ export function useProject(projectId: string | undefined) {
   const [project, setProject] = useState<Project | null>(null);
   const [artifacts, setArtifacts] = useState<ProjectOutput[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stableId, setStableId] = useState(projectId);
 
-  const stableIdRef = useRef(projectId);
-  if (projectId) stableIdRef.current = projectId;
-  const stableId = projectId || stableIdRef.current;
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (projectId) setStableId(projectId);
+  }, [projectId]);
 
   const fetchSilently = useCallback(async () => {
-    const id = stableIdRef.current;
-    if (!id) return;
+    if (!stableId) return;
     try {
-      const response = await api.get(`/api/projects/${id}`);
+      const response = await api.get(`/api/projects/${stableId}`);
       const result = await response.json();
       if (result.success) {
         setProject(result.data);
         setArtifacts(result.data.artifacts || []);
       }
     } catch {
-      // silent — stale data is acceptable
     }
-  }, []);
+  }, [stableId]);
 
   useEffect(() => {
     if (!stableId) return;
@@ -46,6 +46,7 @@ export function useProject(projectId: string | undefined) {
       setLoading(false);
     };
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     load().catch(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };

@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api/client';
-import { downloadBlob } from '@/lib/export';
 import { useConversation } from '@/hooks/useConversation';
+import { useExport } from '@/hooks/useExport';
 import { ChatMessage } from './ChatMessage';
 import { ArtifactCard } from './ArtifactCard';
 import { ArtifactChips, type ChipDef } from './ArtifactChips';
@@ -34,6 +34,7 @@ export function ChatWorkspace({ projectId, projectName, projectIdea, artifacts, 
   const [generationError, setGenerationError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const { handleExport } = useExport(projectId);
 
   const {
     messages, loading, error, sending, isStreaming, streamingContent,
@@ -85,17 +86,6 @@ export function ChatWorkspace({ projectId, projectName, projectIdea, artifacts, 
     setRefiningArtifact(null);
     onArtifactsChange();
   }, [projectId, artifacts, onArtifactsChange]);
-
-  const handleExport = useCallback(async (format: string) => {
-    try {
-      const res = await api.post(`/api/export/${format}`, { projectId });
-      if (!res.ok) return;
-      await downloadBlob(res, `report.${format}`);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Unknown error';
-      console.error('[ChatWorkspace] Export failed:', message);
-    }
-  }, [projectId]);
 
   const hasMessages = messages.length > 0;
   const hasArtifacts = artifacts.length > 0;

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
-import { downloadBlob } from '@/lib/export';
+import { useState, useEffect } from 'react';
 import { formatContentForCopy } from '@/lib/format';
-import { api } from '@/lib/api/client';
 import { Download, Copy, Check, X, ExternalLink } from 'lucide-react';
-import { renderArtifact, getArtifactLabel, getArtifactPreview } from './ArtifactRenderers';
+import { renderArtifact, getArtifactPreview } from './ArtifactRenderers';
+import { useClipboard } from '@/hooks/useClipboard';
+import { useExport } from '@/hooks/useExport';
 import styles from './ArtifactsHub.module.css';
 import { ARTIFACT_LABELS, EXPORT_FORMATS } from '@/constants';
 import type { ArtifactType } from '@/types';
@@ -29,9 +29,10 @@ interface ArtifactsHubProps {
 
 export function ArtifactsHub({ projectId, artifacts }: ArtifactsHubProps) {
   const [open, setOpen] = useState(false);
-  const [exporting, setExporting] = useState<string | null>(null);
   const [copiedType, setCopiedType] = useState<string | null>(null);
   const [selectedArtifact, setSelectedArtifact] = useState<ArtifactHubItem | null>(null);
+  const { exporting, handleExport } = useExport(projectId);
+  const { copy } = useClipboard();
 
   useEffect(() => {
     if (!open) return;
@@ -42,31 +43,13 @@ export function ArtifactsHub({ projectId, artifacts }: ArtifactsHubProps) {
     return () => window.removeEventListener('keydown', handler);
   }, [open]);
 
-  const handleExport = useCallback(async (format: string) => {
-    setExporting(format);
-
-    try {
-      const res = await api.post(`/api/export/${format}`, { projectId });
-      if (!res.ok) return;
-      await downloadBlob(res, `report.${format}`);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Unknown error';
-      console.error('[ArtifactsHub] Export failed:', message);
-    }
-    setExporting(null);
-  }, [projectId]);
-
-  const handleCopy = useCallback(async (type: string, data: Record<string, unknown>) => {
-    try {
-      const label = ARTIFACT_LABELS[type] || type;
-      const text = formatContentForCopy(data, label);
-      await navigator.clipboard.writeText(text);
-      setCopiedType(type);
-      setTimeout(() => setCopiedType(null), 2000);
-    } catch {
-      // clipboard not available
-    }
-  }, []);
+  const handleCopy = async (type: string, data: Record<string, unknown>) => {
+    const label = ARTIFACT_LABELS[type] || type;
+    const text = formatContentForCopy(data, label);
+    await copy(text);
+    setCopiedType(type);
+    setTimeout(() => setCopiedType(null), 2000);
+  };
 
   if (artifacts.length === 0) return null;
 

@@ -26,7 +26,7 @@ export const ARTIFACT_TYPES = [
   'content_strategy',
 ] as const;
 
-export const EXPORT_FORMATS = ['pdf', 'docx', 'md', 'pptx'] as const;
+export const EXPORT_FORMATS = ['pdf', 'docx', 'markdown', 'pptx'] as const;
 
 export const ARTIFACT_LABELS: Record<string, string> = {
   startup_analysis: 'Startup Analysis',

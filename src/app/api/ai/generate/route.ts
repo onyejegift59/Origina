@@ -18,7 +18,7 @@ import { generateDesignDirection } from '@/lib/ai/generators/designDirection';
 import { generateContentStrategy } from '@/lib/ai/generators/contentStrategy';
 import { checkRateLimit } from '@/lib/ratelimit';
 import { AI_RATE_LIMIT, ARTIFACT_LABELS } from '@/constants';
-import type { ArtifactType, ProjectOutput } from '@/types';
+import type { ArtifactType, StartupAnalysis, MvpScope, Roadmap, PersonasOutput } from '@/types';
 
 const generators: Record<string, (project: { name: string; idea: string; problem_description?: string | null }, projectId: string) => Promise<Record<string, unknown>>> = {
   startup_analysis: async (project) => {
@@ -31,12 +31,12 @@ const generators: Record<string, (project: { name: string; idea: string; problem
   },
   mvp_scope: async (project, projectId) => {
     const analysis = await getArtifact(projectId, 'startup_analysis');
-    const result = await generateMvpScope(project.idea, (analysis?.content || {}) as any);
+    const result = await generateMvpScope(project.idea, (analysis?.content || {}) as unknown as StartupAnalysis);
     return result as unknown as Record<string, unknown>;
   },
   roadmap: async (project, projectId) => {
     const mvpScope = await getArtifact(projectId, 'mvp_scope');
-    const result = await generateRoadmap(project.idea, (mvpScope?.content || {}) as any);
+    const result = await generateRoadmap(project.idea, (mvpScope?.content || {}) as unknown as MvpScope);
     return result as unknown as Record<string, unknown>;
   },
   health_score: async (_project, projectId) => {
@@ -45,10 +45,10 @@ const generators: Record<string, (project: { name: string; idea: string; problem
     const mvpScope = await getArtifact(projectId, 'mvp_scope');
     const roadmap = await getArtifact(projectId, 'roadmap');
     const result = await generateHealthScore(
-      (analysis?.content || {}) as any,
-      (personas?.content || { personas: [] }) as any,
-      (mvpScope?.content || {}) as any,
-      (roadmap?.content || {}) as any
+      (analysis?.content || {}) as unknown as StartupAnalysis,
+      (personas?.content || { personas: [] }) as unknown as PersonasOutput,
+      (mvpScope?.content || {}) as unknown as MvpScope,
+      (roadmap?.content || {}) as unknown as Roadmap
     );
     return result as unknown as Record<string, unknown>;
   },

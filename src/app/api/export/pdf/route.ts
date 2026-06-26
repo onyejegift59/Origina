@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   addText(`Idea: ${project.idea}`, 11);
   y += 8;
 
-  const analysis = artifactMap['startup_analysis'] as any;
+  const analysis = artifactMap['startup_analysis'] as { problemStatement?: string; targetAudience?: string; valueProposition?: string; marketOpportunity?: string } | undefined;
   if (analysis) {
     addText('Startup Analysis', 16, true);
     addText(`Problem: ${analysis.problemStatement || ''}`, 10);
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     y += 4;
   }
 
-  const personas = artifactMap['personas'] as any;
+  const personas = artifactMap['personas'] as { personas?: Array<{ name?: string; role?: string; goals?: string[]; painPoints?: string[] }> } | undefined;
   if (personas?.personas) {
     addText('User Personas', 16, true);
     for (const p of personas.personas) {

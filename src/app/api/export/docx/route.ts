@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { getProject, getProjectArtifacts, createExportRecord } from '@/lib/supabase/queries';
 import { safeFileName } from '@/lib/security';
-import { Document, Packer, Paragraph, TextRun } from 'docx';
+import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
 
 export async function POST(request: Request) {
   const supabase = await createServerSupabaseClient();
@@ -39,13 +39,19 @@ export async function POST(request: Request) {
     return acc;
   }, {} as Record<string, unknown>);
 
+  const HEADING_MAP = {
+    1: HeadingLevel.HEADING_1,
+    2: HeadingLevel.HEADING_2,
+    3: HeadingLevel.HEADING_3,
+  } as const;
+
   const children: Paragraph[] = [];
 
   function addHeading(text: string, level: number) {
     children.push(
       new Paragraph({
         text,
-        heading: level > 0 ? `Heading${level}` as any : undefined,
+        heading: level > 0 ? HEADING_MAP[level as keyof typeof HEADING_MAP] : undefined,
         spacing: { before: 300, after: 200 },
       })
     );
@@ -76,7 +82,7 @@ export async function POST(request: Request) {
   addBody(`Idea: ${project.idea}`);
   addBody(`Problem: ${project.problem_description || 'Not specified'}`);
 
-  const analysis = artifactMap['startup_analysis'] as any;
+  const analysis = artifactMap['startup_analysis'] as { problemStatement?: string; targetAudience?: string; valueProposition?: string; marketOpportunity?: string; risks?: string[]; recommendations?: string[] } | undefined;
   if (analysis) {
     addHeading('Startup Analysis', 1);
     addHeading('Problem Statement', 2);
@@ -97,7 +103,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const personas = artifactMap['personas'] as any;
+  const personas = artifactMap['personas'] as { personas?: Array<{ name?: string; role?: string; goals?: string[]; painPoints?: string[]; motivations?: string[] }> } | undefined;
   if (personas?.personas) {
     addHeading('User Personas', 1);
     for (const p of personas.personas) {
@@ -108,7 +114,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const mvp = artifactMap['mvp_scope'] as any;
+  const mvp = artifactMap['mvp_scope'] as { mustHave?: string[]; shouldHave?: string[]; couldHave?: string[]; excludedFeatures?: string[] } | undefined;
   if (mvp) {
     addHeading('MVP Scope', 1);
     if (mvp.mustHave?.length) { addHeading('Must Have', 2); addList(mvp.mustHave); }
@@ -117,7 +123,7 @@ export async function POST(request: Request) {
     if (mvp.excludedFeatures?.length) { addHeading("Won't Have (v1)", 2); addList(mvp.excludedFeatures); }
   }
 
-  const roadmap = artifactMap['roadmap'] as any;
+  const roadmap = artifactMap['roadmap'] as { phase1?: string[]; phase2?: string[]; phase3?: string[] } | undefined;
   if (roadmap) {
     addHeading('Product Roadmap', 1);
     if (roadmap.phase1?.length) { addHeading('Phase 1: Core MVP', 2); addList(roadmap.phase1); }
@@ -125,7 +131,7 @@ export async function POST(request: Request) {
     if (roadmap.phase3?.length) { addHeading('Phase 3: Growth', 2); addList(roadmap.phase3); }
   }
 
-  const health = artifactMap['health_score'] as any;
+  const health = artifactMap['health_score'] as { score?: number; strengths?: string[]; risks?: string[]; recommendations?: string[] } | undefined;
   if (health) {
     addHeading('Health Score', 1);
     addBody(`Score: ${health.score}/100`);

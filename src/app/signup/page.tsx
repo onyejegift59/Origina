@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { EyeIcon, EyeOffIcon, Check, X } from 'lucide-react';
@@ -25,7 +24,6 @@ export default function SignupPage() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [signedUp, setSignedUp] = useState(false);
-  const router = useRouter();
 
   const emailError = useMemo(() => {
     if (!touched.email) return '';
@@ -45,8 +43,6 @@ export default function SignupPage() {
   }, [confirmPassword, password, touched.confirm]);
 
   const strength = useMemo(() => getPasswordStrength(password), [password]);
-
-  const allRulesMet = useMemo(() => PASSWORD_RULES.every((r) => r.test(password)), [password]);
 
   const valid = useMemo(() => {
     return validateEmail(email).valid && validatePassword(password).valid && password === confirmPassword;

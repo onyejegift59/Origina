@@ -38,8 +38,4 @@ export function getPasswordStrength(password: string): PasswordStrength {
   return { score: 3, label: 'Strong' };
 }
 
-export function isFormValid(email: string, password: string): boolean {
-  return validateEmail(email).valid && validatePassword(password).valid;
-}
-
 

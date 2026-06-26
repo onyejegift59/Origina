@@ -18,7 +18,7 @@ import { generateDesignDirection } from '@/lib/ai/generators/designDirection';
 import { generateContentStrategy } from '@/lib/ai/generators/contentStrategy';
 import { checkRateLimit } from '@/lib/ratelimit';
 import { ASSISTANT_RATE_LIMIT, ARTIFACT_LABELS } from '@/constants';
-import type { ArtifactType } from '@/types';
+import type { ArtifactType, StartupAnalysis, MvpScope, Roadmap, PersonasOutput } from '@/types';
 
 const SYSTEM_PROMPT = `You are Origina's product strategy assistant embedded in a product planning workspace.
 
@@ -83,14 +83,14 @@ async function generateArtifactForProject(
       case 'mvp_scope': {
         const analysis = await getArtifact(projectId, 'startup_analysis');
         if (!analysis) return 'A startup analysis is required before defining the MVP scope.';
-        const result = await generateMvpScope(project.idea, analysis.content as any);
+        const result = await generateMvpScope(project.idea, analysis.content as unknown as StartupAnalysis);
         await upsertArtifact(projectId, type, result as unknown as Record<string, unknown>);
         return `${label} added to artifacts.`;
       }
       case 'roadmap': {
         const mvpScope = await getArtifact(projectId, 'mvp_scope');
         if (!mvpScope) return 'An MVP scope is required before building a roadmap.';
-        const result = await generateRoadmap(project.idea, mvpScope.content as any);
+        const result = await generateRoadmap(project.idea, mvpScope.content as unknown as MvpScope);
         await upsertArtifact(projectId, type, result as unknown as Record<string, unknown>);
         return `${label} added to artifacts.`;
       }
@@ -100,10 +100,10 @@ async function generateArtifactForProject(
         const mvpScope = await getArtifact(projectId, 'mvp_scope');
         const roadmap = await getArtifact(projectId, 'roadmap');
         const result = await generateHealthScore(
-          (analysis?.content || {}) as any,
-          (personas?.content || { personas: [] }) as any,
-          (mvpScope?.content || {}) as any,
-          (roadmap?.content || {}) as any
+          (analysis?.content || {}) as unknown as StartupAnalysis,
+          (personas?.content || { personas: [] }) as unknown as PersonasOutput,
+          (mvpScope?.content || {}) as unknown as MvpScope,
+          (roadmap?.content || {}) as unknown as Roadmap
         );
         await upsertArtifact(projectId, type, result as unknown as Record<string, unknown>);
         return `${label} added to artifacts.`;

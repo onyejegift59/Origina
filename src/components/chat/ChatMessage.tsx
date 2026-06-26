@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useCallback, memo } from 'react';
+import { memo } from 'react';
 import { Copy, Check } from 'lucide-react';
+import { useClipboard } from '@/hooks/useClipboard';
 import styles from './ChatMessage.module.css';
 
 interface ChatMessageProps {
@@ -12,17 +13,7 @@ interface ChatMessageProps {
 
 export const ChatMessage = memo(function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
   const isUser = role === 'user';
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(content);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // clipboard not available
-    }
-  }, [content]);
+  const { copied, copy } = useClipboard();
 
   if (isUser) {
     return (
@@ -31,7 +22,7 @@ export const ChatMessage = memo(function ChatMessage({ role, content, isStreamin
           <div className={styles.userText}>{content}</div>
           <button
             className={styles.copyBtn}
-            onClick={handleCopy}
+            onClick={() => copy(content)}
             aria-label={copied ? 'Copied' : 'Copy message'}
             title={copied ? 'Copied' : 'Copy'}
           >
@@ -48,7 +39,7 @@ export const ChatMessage = memo(function ChatMessage({ role, content, isStreamin
         <div className={styles.assistantText}>{content}</div>
         <button
           className={styles.assistantCopyBtn}
-          onClick={handleCopy}
+          onClick={() => copy(content)}
           aria-label={copied ? 'Copied' : 'Copy message'}
           title={copied ? 'Copied' : 'Copy'}
         >
