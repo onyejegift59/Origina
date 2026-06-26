@@ -176,17 +176,19 @@ export default function SignupPage() {
                 </div>
               )}
 
-              <ul className={formStyles.passwordRules}>
-                {PASSWORD_RULES.map((rule) => {
-                  const met = rule.test(password);
-                  return (
-                    <li key={rule.key} className={`${formStyles.passwordRule} ${met ? formStyles.passwordRuleMet : ''}`}>
-                      {met ? <Check size={12} /> : <X size={12} />}
-                      {rule.label}
-                    </li>
-                  );
-                })}
-              </ul>
+              {touched.password && (
+                <ul className={formStyles.passwordRules}>
+                  {PASSWORD_RULES.map((rule) => {
+                    const met = rule.test(password);
+                    if (met) return null;
+                    return (
+                      <li key={rule.key} className={formStyles.passwordRule}>
+                        {rule.label}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
 
               {passwordError && (
                 <p id="password-error" className={formStyles.fieldError} role="alert">{passwordError}</p>
