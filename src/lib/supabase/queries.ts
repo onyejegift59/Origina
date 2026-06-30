@@ -44,7 +44,7 @@ export async function createProject(
     .single();
 
   if (error) {
-    console.error('[createProject] Supabase insert failed:', {
+    console.error('[createProject] Database insert failed:', {
       message: error.message,
       details: error.details,
       hint: error.hint,

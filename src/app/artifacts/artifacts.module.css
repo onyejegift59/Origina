@@ -84,6 +84,11 @@
   background: var(--primary-container);
 }
 
+.projectLink:active {
+  background: var(--primary-container);
+  opacity: 0.8;
+}
+
 .artifactGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

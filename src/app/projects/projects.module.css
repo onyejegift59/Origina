@@ -40,12 +40,28 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 150ms, transform 150ms;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+  transition: box-shadow 150ms, transform 150ms, background 150ms;
+  will-change: transform;
 }
 
 .newBtn:hover {
-  opacity: 0.92;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
   transform: translateY(-1px);
+}
+
+.newBtn:active {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+  transform: translateY(0);
+}
+
+.newBtn:disabled {
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  box-shadow: none;
+  transform: none;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .state {
@@ -166,6 +182,11 @@
   color: var(--primary);
 }
 
+.renameBtn:active {
+  background: var(--surface-container-high);
+  color: var(--primary);
+}
+
 .editRow {
   display: flex;
   align-items: center;
@@ -207,6 +228,11 @@
   color: var(--on-surface);
 }
 
+.editAction:active {
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+}
+
 @media (max-width: 768px) {
   .page {
     margin-left: 0;
@@ -235,6 +261,11 @@
   }
 
   .menuBtn:hover {
+    background: var(--surface-container-high);
+    color: var(--on-surface);
+  }
+
+  .menuBtn:active {
     background: var(--surface-container-high);
     color: var(--on-surface);
   }

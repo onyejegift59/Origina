@@ -2,13 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { validatePassword, getPasswordStrength } from '@/lib/validation';
+import styles from '../login/login.module.css';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -16,7 +21,7 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (!session) {
         router.push('/login');
       } else {
@@ -42,12 +47,21 @@ export default function ResetPasswordPage() {
 
     setLoading(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.updateUser({ password });
+    const { error: updateError } = await supabase.auth.updateUser({ password });
 
-    if (error) {
-      setError(error.message);
+    if (updateError) {
+      setError(updateError.message);
       setLoading(false);
       return;
+    }
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user?.id) {
+      await fetch('/api/auth/clear-reset-flag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: session.user.id }),
+      });
     }
 
     setSuccess(true);
@@ -59,70 +73,91 @@ export default function ResetPasswordPage() {
   if (!ready) return null;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100dvh', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div style={{ width: '100%', maxWidth: '400px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '8px' }}>Reset your password</h1>
-        <p style={{ fontSize: '14px', color: 'var(--on-surface-variant)', marginBottom: '24px' }}>
-          Enter your new password below.
-        </p>
+    <div className={styles.page}>
+      <div className={styles.illustrationContainer}>
+        <Image src="/images/origina-auth-illustration.png" alt="" fill sizes="100vw" priority className={styles.illustration} />
+      </div>
+      <div className={styles.overlay} />
+      <div className={styles.formContainer}>
+        <div className={styles.container}>
+          <h1 className={styles.title}>Reset your password</h1>
+          <p className={styles.subtitle}>Enter your new password below.</p>
 
-        {success ? (
-          <div style={{ padding: '16px', background: 'var(--primary-container)', borderRadius: '8px', color: 'var(--on-primary-container)' }}>
-            Password updated successfully. Redirecting to login...
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: '16px' }}>
-              <label htmlFor="password" style={{ display: 'block', fontSize: '14px', fontWeight: 500, marginBottom: '6px' }}>
-                New password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--outline)', borderRadius: '8px', fontSize: '14px', background: 'var(--surface)', color: 'var(--on-surface)' }}
-                required
-                minLength={8}
-              />
-              {password && (
-                <div style={{ marginTop: '8px', fontSize: '12px', color: strength.score >= 3 ? 'var(--primary)' : 'var(--on-surface-variant)' }}>
-                  Strength: {strength.label}
+          {success ? (
+            <div className={styles.successBanner}>
+              Password updated successfully. Redirecting to login...
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <div className={styles.field}>
+                <label htmlFor="password" className={styles.label}>New password</label>
+                <div className={styles.passwordWrapper}>
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className={`${styles.input} ${styles.passwordInput}`}
+                    required
+                    minLength={8}
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    className={styles.eyeBtn}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+                  </button>
+                </div>
+                {password && (
+                  <div className={styles.strengthBar} role="progressbar" aria-valuenow={strength.score} aria-valuemin={0} aria-valuemax={3} aria-label={`Password strength: ${strength.label}`}>
+                    <div
+                      className={`${styles.strengthFill} ${styles[`strength${strength.label}`]}`}
+                      style={{ width: `${(strength.score / 3) * 100}%` }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {password.length > 0 && (
+                <div className={styles.field}>
+                  <label htmlFor="confirm-password" className={styles.label}>Confirm new password</label>
+                  <div className={styles.passwordWrapper}>
+                    <input
+                      id="confirm-password"
+                      type={showConfirm ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className={`${styles.input} ${styles.passwordInput}`}
+                      required
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      className={styles.eyeBtn}
+                      onClick={() => setShowConfirm((prev) => !prev)}
+                      aria-label={showConfirm ? 'Hide password' : 'Show password'}
+                    >
+                      {showConfirm ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+                    </button>
+                  </div>
                 </div>
               )}
-            </div>
 
-            {password.length > 0 && (
-              <div style={{ marginBottom: '24px' }}>
-                <label htmlFor="confirm-password" style={{ display: 'block', fontSize: '14px', fontWeight: 500, marginBottom: '6px' }}>
-                  Confirm new password
-                </label>
-                <input
-                  id="confirm-password"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--outline)', borderRadius: '8px', fontSize: '14px', background: 'var(--surface)', color: 'var(--on-surface)' }}
-                  required
-                />
-              </div>
-            )}
+              {error && (
+                <div className={styles.error} role="alert">
+                  {error}
+                </div>
+              )}
 
-            {error && (
-              <div style={{ padding: '12px', background: 'var(--error-container)', borderRadius: '8px', color: 'var(--on-error-container)', fontSize: '14px', marginBottom: '16px' }} role="alert">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              style={{ width: '100%', padding: '12px', background: 'var(--primary)', color: 'var(--on-primary)', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: 500, cursor: 'pointer', opacity: loading ? 0.6 : 1 }}
-            >
-              {loading ? 'Updating...' : 'Reset password'}
-            </button>
-          </form>
-        )}
+              <button type="submit" className={styles.button} disabled={loading}>
+                {loading ? 'Updating...' : 'Reset password'}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );

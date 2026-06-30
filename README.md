@@ -9,7 +9,7 @@ AI-powered startup analysis platform. Generate business artifacts — business m
 | Framework | [Next.js 16](https://nextjs.org) |
 | Language | TypeScript |
 | Database | [Supabase](https://supabase.com) (PostgreSQL) |
-| Auth | Supabase Auth (email/password) |
+| Auth | Supabase (email/password via Origina) |
 | AI | DeepSeek |
 | Rate Limiting | [Upstash Redis](https://upstash.com) |
 | Document Export | PDF ([jsPDF](https://github.com/parallax/jsPDF)), DOCX ([docx](https://docx.js.org/)), PPTX ([PptxGenJS](https://github.com/gitbrent/PptxGenJS)) |
@@ -107,7 +107,7 @@ src/
 - **15 Artifact Types** — Business model canvas, personas, positioning statements, SWOT, competitor analysis, and more
 - **Document Export** — Download artifacts as PDF, DOCX, or PPTX
 - **Project Management** — Organize artifacts by project
-- **Supabase Auth** — Email/password authentication
+- **Authentication** — Email/password via Supabase, branded as Origina
 - **Rate Limiting** — Upstash Redis-based rate limiting on API routes
 
 ## Architecture

@@ -22,18 +22,28 @@ interface ArtifactCardProps {
   onExport?: (format: string) => void;
   isGenerating?: boolean;
   isRefining?: boolean;
+  isNew?: boolean;
 }
 
 export const ArtifactCard = memo(function ArtifactCard({
   type, content, variant = 'grid', onCardClick, onRegenerate, onRefine, onExport,
-  isGenerating, isRefining
+  isGenerating, isRefining, isNew
 }: ArtifactCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [refineInput, setRefineInput] = useState('');
   const [exportOpen, setExportOpen] = useState(false);
+  const [showNewBadge, setShowNewBadge] = useState(false);
   const label = getArtifactLabel(type);
   const { copied, copy } = useClipboard();
+
+  useEffect(() => {
+    if (isNew) {
+      setShowNewBadge(true);
+      const timer = setTimeout(() => setShowNewBadge(false), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [isNew]);
 
   useEffect(() => {
     if (openModal) {
@@ -63,6 +73,7 @@ export const ArtifactCard = memo(function ArtifactCard({
         <div className={styles.toolbar}>
           <span className={styles.toolbarType}>{label}</span>
           <div className={styles.toolbarActions}>
+            {showNewBadge && <span className={styles.newBadge}>New</span>}
             <Tooltip content="Open">
               <button
                 className={styles.toolbarBtn}

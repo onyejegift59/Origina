@@ -5,6 +5,7 @@
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL,
+  password_reset_required BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -264,7 +265,7 @@ CREATE POLICY "Users can delete own export files"
     AND (storage.foldername(name))[1] = auth.uid()::text
   );
 -- 005_auto_create_profiles.sql
--- Auto-creates a profile row when a new user signs up via Supabase Auth.
+-- Auto-creates a profile row when a new user signs up via Origina auth.
 -- Also backfills profiles for existing auth users who don't have one.
 
 -- Function to create a profile on user creation

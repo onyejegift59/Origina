@@ -62,6 +62,10 @@
   color: var(--on-surface);
 }
 
+.projectItem:active {
+  background: var(--surface-container);
+}
+
 .projectItem:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: -2px;
@@ -100,6 +104,11 @@
 
 .renameIcon:hover {
   opacity: 1 !important;
+  background: var(--surface-container-high);
+  color: var(--primary);
+}
+
+.renameIcon:active {
   background: var(--surface-container-high);
   color: var(--primary);
 }

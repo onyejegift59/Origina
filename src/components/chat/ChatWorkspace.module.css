@@ -88,11 +88,29 @@
   border-radius: var(--radius-sm);
   font-size: var(--label-large-font-size);
   font-weight: var(--label-large-font-weight);
-  transition: opacity 150ms;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+  transition: box-shadow 150ms, transform 150ms, background 150ms;
+  will-change: transform;
 }
 
 .retryBtn:hover {
-  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-1px);
+}
+
+.retryBtn:active {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+  transform: translateY(0);
+}
+
+.retryBtn:disabled {
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  box-shadow: none;
+  transform: none;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .emptyState {
@@ -148,18 +166,24 @@
   color: var(--on-surface-variant);
 }
 
-.artifactSection {
+.inlineArtifacts {
   max-width: 800px;
   margin: 0 auto;
   width: 100%;
   padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.generatingIndicator {
+.inlineSpinner {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 16px;
+  max-width: 800px;
+  margin: 16px auto;
+  width: 100%;
+  padding: 12px 24px;
   color: var(--on-surface-variant);
   font-size: var(--body-medium-font-size);
 }
@@ -176,46 +200,6 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-.artifactSectionLabel {
-  display: block;
-  font-size: var(--label-small-font-size);
-  font-weight: var(--label-small-font-weight);
-  color: var(--on-surface-variant);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0 4px;
-  margin-top: 32px;
-  margin-bottom: 16px;
-}
-
-.artifactRow {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--outline-variant) transparent;
-  -webkit-overflow-scrolling: touch;
-}
-
-.artifactRow::-webkit-scrollbar {
-  height: 6px;
-}
-
-.artifactRow::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.artifactRow::-webkit-scrollbar-thumb {
-  background: var(--outline-variant);
-  border-radius: 3px;
-}
-
-.artifactRowItem {
-  flex: 0 0 300px;
-  min-width: 0;
 }
 
 .artifactActions {
@@ -248,18 +232,28 @@
   font-size: var(--label-small-font-size);
   color: var(--on-surface-variant);
   cursor: pointer;
-  transition: border-color 150ms, color 150ms, background 150ms;
   min-height: 36px;
+  transition: border-color 150ms, color 150ms, background 150ms, transform 150ms;
 }
 
 .artifactBtn:hover {
   border-color: var(--primary);
   color: var(--on-surface);
   background: var(--surface-container-low);
+  transform: translateY(-1px);
+}
+
+.artifactBtn:active {
+  background: var(--surface-container-high);
+  transform: translateY(0);
 }
 
 .artifactBtn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
+  border-color: var(--outline-variant);
+  color: var(--on-surface-variant);
+  background: none;
+  transform: none;
   cursor: not-allowed;
 }
 
@@ -307,7 +301,7 @@
     padding: 24px 16px 16px;
   }
 
-  .artifactSection {
+  .inlineArtifacts {
     padding: 0 16px;
   }
 

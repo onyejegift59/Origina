@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { NextResponse, type NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 import { validateEmail } from '@/lib/validation';
 import { checkRateLimit } from '@/lib/ratelimit';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const body = await request.json();
   const { email, password } = body;
 
@@ -31,7 +31,25 @@ export async function POST(request: Request) {
     );
   }
 
-  const supabase = await createServerSupabaseClient();
+  const responseCookies: { name: string; value: string; options: Record<string, unknown> }[] = [];
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value);
+            responseCookies.push({ name, value, options });
+          });
+        },
+      },
+    }
+  );
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -45,5 +63,10 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({ success: true });
+  const response = NextResponse.json({ success: true });
+  responseCookies.forEach(({ name, value, options }) => {
+    response.cookies.set(name, value, options);
+  });
+
+  return response;
 }

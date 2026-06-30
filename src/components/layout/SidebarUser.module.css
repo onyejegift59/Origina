@@ -72,6 +72,20 @@
   background: var(--surface-container-low);
 }
 
+.logoutBtn:active {
+  background: var(--surface-container-low);
+}
+
+.logoutBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.logoutBtn:disabled:hover {
+  background: transparent;
+  color: var(--on-surface-variant);
+}
+
 .collapsedRow {
   display: flex;
   flex-direction: column;
@@ -111,4 +125,18 @@
 .iconBtn:hover {
   color: var(--on-surface);
   background: var(--surface-container-low);
+}
+
+.iconBtn:active {
+  background: var(--surface-container-low);
+}
+
+.iconBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.iconBtn:disabled:hover {
+  background: transparent;
+  color: var(--on-surface-variant);
 }

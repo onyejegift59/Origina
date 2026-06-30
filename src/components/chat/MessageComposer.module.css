@@ -57,26 +57,56 @@
 .sendBtn {
   background: var(--primary);
   color: var(--on-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+  transition: box-shadow 150ms, transform 150ms, background 150ms;
+  will-change: transform;
 }
 
 .sendBtn:hover {
-  opacity: 0.85;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-1px);
+}
+
+.sendBtn:active {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+  transform: translateY(0);
 }
 
 .sendBtn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
   background: var(--surface-container-high);
   color: var(--on-surface-variant);
+  box-shadow: none;
+  transform: none;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .stopBtn {
   background: var(--error);
   color: var(--on-error);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+  transition: box-shadow 150ms, transform 150ms, background 150ms;
+  will-change: transform;
 }
 
 .stopBtn:hover {
   background: var(--error-container);
   color: var(--error);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-1px);
+}
+
+.stopBtn:active {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+  transform: translateY(0);
+}
+
+.stopBtn:disabled {
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  box-shadow: none;
+  transform: none;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 

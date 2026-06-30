@@ -66,9 +66,18 @@
   background: var(--surface-container-low);
 }
 
+.cancelBtn:active {
+  background: var(--surface-container);
+}
+
 .cancelBtn:disabled {
-  opacity: 0.5;
+  opacity: 0.35;
   cursor: not-allowed;
+  background: var(--surface);
+}
+
+.cancelBtn:disabled:hover {
+  background: var(--surface);
 }
 
 .confirmBtn {
@@ -81,15 +90,27 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 150ms;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+  transition: box-shadow 150ms, transform 150ms, background 150ms;
+  will-change: transform;
 }
 
 .confirmBtn:hover {
-  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-1px);
+}
+
+.confirmBtn:active {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+  transform: translateY(0);
 }
 
 .confirmBtn:disabled {
-  opacity: 0.4;
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  box-shadow: none;
+  transform: none;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -99,11 +120,21 @@
 }
 
 .confirmBtnDestructive:hover {
-  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-1px);
+}
+
+.confirmBtnDestructive:active {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+  transform: translateY(0);
 }
 
 .confirmBtnDestructive:disabled {
-  opacity: 0.4;
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  box-shadow: none;
+  transform: none;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 

@@ -6,7 +6,7 @@ import { checkRateLimit } from '@/lib/ratelimit';
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { email, password } = body;
+  const { email, password, next } = body;
 
   const emailResult = validateEmail(email);
   if (!emailResult.valid) {
@@ -35,11 +35,16 @@ export async function POST(request: Request) {
 
   const supabase = await createServerSupabaseClient();
 
+  const redirectTo = new URL('/auth/callback', request.url);
+  if (next) {
+    redirectTo.searchParams.set('next', next);
+  }
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${new URL(request.url).origin}/auth/callback`,
+      emailRedirectTo: redirectTo.toString(),
     },
   });
 

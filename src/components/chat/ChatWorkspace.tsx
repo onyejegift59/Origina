@@ -32,8 +32,11 @@ export function ChatWorkspace({ projectId, projectName, projectIdea, artifacts, 
   const [generatingArtifact, setGeneratingArtifact] = useState<ArtifactType | null>(null);
   const [refiningArtifact, setRefiningArtifact] = useState<ArtifactType | null>(null);
   const [generationError, setGenerationError] = useState<string | null>(null);
+  const [newArtifactTypes, setNewArtifactTypes] = useState<Set<ArtifactType>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const newArtifactRef = useRef<HTMLDivElement>(null);
+  const prevArtifactTypesRef = useRef<Set<ArtifactType>>(new Set());
   const { handleExport } = useExport(projectId);
 
   const {
@@ -41,15 +44,37 @@ export function ChatWorkspace({ projectId, projectName, projectIdea, artifacts, 
     handleSend, handleStop, handleRetry,
   } = useConversation({ projectId, onArtifactsChange });
 
-  const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
+  const existingArtifactTypes = new Set(artifacts.map((a) => a.type));
 
   useEffect(() => {
-    if (messages.length > 0 || artifacts.length > 0) {
-      scrollToBottom();
+    const prev = prevArtifactTypesRef.current;
+    const newTypes = artifacts
+      .map((a) => a.type)
+      .filter((t) => !prev.has(t));
+
+    if (newTypes.length > 0) {
+      setNewArtifactTypes(new Set(newTypes));
+      setTimeout(() => {
+        setNewArtifactTypes(new Set());
+      }, 5000);
     }
-  }, [messages.length, artifacts.length, generatingArtifact, scrollToBottom]);
+
+    prevArtifactTypesRef.current = new Set(artifacts.map((a) => a.type));
+  }, [artifacts]);
+
+  useEffect(() => {
+    if (newArtifactTypes.size > 0) {
+      setTimeout(() => {
+        newArtifactRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }, [newArtifactTypes]);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages.length]);
 
   const handleGenerateArtifact = useCallback(async (type: ArtifactType) => {
     setGeneratingArtifact(type);
@@ -162,33 +187,33 @@ export function ChatWorkspace({ projectId, projectName, projectIdea, artifacts, 
               </div>
             )}
 
-            {artifacts.length > 0 && (
-              <div className={styles.artifactSection}>
-                <span className={styles.artifactSectionLabel}>Generated Artifacts</span>
-                <div className={styles.artifactRow}>
-                  {artifacts.map((artifact) => (
-                    <div key={artifact.type} className={styles.artifactRowItem}>
-                      <ArtifactCard
-                        type={artifact.type}
-                        content={artifact.content}
-                        onRegenerate={() => handleGenerateArtifact(artifact.type)}
-                        onRefine={(instruction) => handleRefine(artifact.type, instruction)}
-                        onExport={(format) => handleExport(format)}
-                        isGenerating={generatingArtifact === artifact.type}
-                        isRefining={refiningArtifact === artifact.type}
-                      />
-                    </div>
-                  ))}
-                </div>
+            {generatingArtifact && !existingArtifactTypes.has(generatingArtifact) && (
+              <div className={styles.inlineSpinner}>
+                <div className={styles.spinning} aria-hidden="true" />
+                <span>Generating {generatingArtifact.replace('_', ' ')}...</span>
               </div>
             )}
 
-            {generatingArtifact && !artifacts.find((a) => a.type === generatingArtifact) && (
-              <div className={styles.artifactSection}>
-                <div className={styles.generatingIndicator}>
-                  <div className={styles.spinning} aria-hidden="true" />
-                  <span>Generating {generatingArtifact.replace('_', ' ')}...</span>
-                </div>
+            {hasArtifacts && (
+              <div className={styles.inlineArtifacts}>
+                {artifacts.map((artifact, idx) => (
+                  <div
+                    key={artifact.type}
+                    ref={idx === artifacts.length - 1 ? newArtifactRef : undefined}
+                  >
+                    <ArtifactCard
+                      type={artifact.type}
+                      content={artifact.content}
+                      variant="chat"
+                      onRegenerate={() => handleGenerateArtifact(artifact.type)}
+                      onRefine={(instruction) => handleRefine(artifact.type, instruction)}
+                      onExport={(format) => handleExport(format)}
+                      isGenerating={generatingArtifact === artifact.type}
+                      isRefining={refiningArtifact === artifact.type}
+                      isNew={newArtifactTypes.has(artifact.type)}
+                    />
+                  </div>
+                ))}
               </div>
             )}
 
@@ -220,7 +245,11 @@ export function ChatWorkspace({ projectId, projectName, projectIdea, artifacts, 
         <div ref={messagesEndRef} />
       </div>
 
-      <ArtifactChips onGenerate={handleChipGenerate} disabled={sending || generatingArtifact !== null} />
+      <ArtifactChips
+        onGenerate={handleChipGenerate}
+        disabled={sending || generatingArtifact !== null}
+        existingArtifacts={existingArtifactTypes}
+      />
       <MessageComposer
         onSend={handleSend}
         onStop={handleStop}

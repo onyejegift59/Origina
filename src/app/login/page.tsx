@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useMemo, useCallback, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
@@ -9,7 +9,12 @@ import { createClient } from '@/lib/supabase/client';
 import { validateEmail } from '@/lib/validation';
 import styles from './login.module.css';
 
-export default function LoginPage() {
+const ERROR_MESSAGES: Record<string, string> = {
+  auth_failed: 'Email verification failed. Please try signing up again.',
+  link_expired: 'This password reset link has expired. Please request a new one.',
+};
+
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +23,10 @@ export default function LoginPage() {
   const [checkingSession, setCheckingSession] = useState(true);
   const [touched, setTouched] = useState({ email: false, password: false });
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const next = searchParams.get('next') ?? '/dashboard';
+  const callbackError = searchParams.get('error');
 
   const emailError = useMemo(() => {
     if (!touched.email) return '';
@@ -35,17 +44,23 @@ export default function LoginPage() {
   }, []);
 
   useEffect(() => {
+    if (callbackError) {
+      setError(ERROR_MESSAGES[callbackError] || 'Authentication failed. Please try again.');
+    }
+  }, [callbackError]);
+
+  useEffect(() => {
     const check = async () => {
       const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        router.push('/dashboard');
+        router.push(next);
       } else {
         setCheckingSession(false);
       }
     };
     check();
-  }, [router]);
+  }, [router, next]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +84,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/dashboard');
+      router.push(next);
     } catch {
       setError('Unable to connect. Please try again.');
       setLoading(false);
@@ -177,5 +192,19 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className={styles.page} role="status" aria-label="Loading">
+        <div className={styles.spinnerContainer}>
+          <div className={styles.spinner} />
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

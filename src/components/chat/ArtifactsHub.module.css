@@ -101,6 +101,15 @@
   color: var(--on-surface);
 }
 
+.closeBtn:active {
+  background: var(--surface-container);
+}
+
+.closeBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 .panelBody {
   flex: 1;
   overflow-y: auto;
@@ -198,13 +207,26 @@
   border-radius: var(--radius-xs);
   color: var(--on-surface-variant);
   cursor: pointer;
-  transition: color 150ms, background 150ms, border-color 150ms;
+  transition: color 150ms, background 150ms, border-color 150ms, transform 150ms;
 }
 
 .iconBtn:hover {
   color: var(--on-surface);
   background: var(--surface-container-high);
   border-color: var(--outline);
+  transform: translateY(-1px);
+}
+
+.iconBtn:active {
+  background: var(--surface-container);
+  transform: translateY(0);
+}
+
+.iconBtn:disabled {
+  opacity: 0.35;
+  border-color: var(--outline-variant);
+  transform: none;
+  cursor: not-allowed;
 }
 
 .exportSection {
@@ -241,17 +263,26 @@
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 150ms, color 150ms, background 150ms;
+  transition: border-color 150ms, color 150ms, background 150ms, transform 150ms;
 }
 
 .exportBtn:hover {
   border-color: var(--primary);
   color: var(--primary);
   background: var(--primary-container);
+  transform: translateY(-1px);
+}
+
+.exportBtn:active {
+  transform: translateY(0);
 }
 
 .exportBtn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
+  border-color: var(--outline-variant);
+  color: var(--on-surface-variant);
+  background: none;
+  transform: none;
   cursor: not-allowed;
 }
 

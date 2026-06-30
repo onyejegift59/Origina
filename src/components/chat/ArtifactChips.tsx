@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { Check } from 'lucide-react';
 import styles from './ArtifactChips.module.css';
 
 export interface ChipDef {
@@ -32,9 +33,10 @@ const VISIBLE_COUNT = 7;
 interface ArtifactChipsProps {
   onGenerate: (chip: ChipDef) => void;
   disabled?: boolean;
+  existingArtifacts?: Set<string>;
 }
 
-export const ArtifactChips = React.memo(function ArtifactChips({ onGenerate, disabled }: ArtifactChipsProps) {
+export const ArtifactChips = React.memo(function ArtifactChips({ onGenerate, disabled, existingArtifacts }: ArtifactChipsProps) {
   const [moreOpen, setMoreOpen] = useState(false);
   const [selectedChipId, setSelectedChipId] = useState<string | null>(null);
   const moreRef = useRef<HTMLDivElement>(null);
@@ -62,21 +64,27 @@ export const ArtifactChips = React.memo(function ArtifactChips({ onGenerate, dis
     setTimeout(() => setSelectedChipId(null), 2000);
   };
 
+  const renderChip = (chip: ChipDef) => {
+    const exists = existingArtifacts?.has(chip.id);
+    return (
+      <button
+        key={chip.id}
+        className={`${styles.chip}${exists ? ` ${styles.chipDone}` : ''}${selectedChipId === chip.id ? ` ${styles.chipSelected}` : ''}${disabled ? ` ${styles.chipDisabled}` : ''}`}
+        onClick={() => handleChipClick(chip)}
+        role="listitem"
+        aria-label={`${chip.label}${exists ? ' (generated)' : ''}`}
+        disabled={disabled}
+      >
+        {exists && <Check size={14} className={styles.chipCheck} aria-hidden="true" />}
+        {chip.label}
+      </button>
+    );
+  };
+
   return (
     <div className={styles.chipsWrapper}>
       <div className={styles.chipsContainer} role="list" aria-label="Suggested artifacts">
-        {visibleChips.map((chip) => (
-          <button
-            key={chip.id}
-            className={`${styles.chip}${selectedChipId === chip.id ? ` ${styles.chipSelected}` : ''}${disabled ? ` ${styles.chipDisabled}` : ''}`}
-            onClick={() => handleChipClick(chip)}
-            role="listitem"
-            aria-label={chip.label}
-            disabled={disabled}
-          >
-            {chip.label}
-          </button>
-        ))}
+        {visibleChips.map(renderChip)}
         {hiddenChips.length > 0 && (
           <div className={styles.moreWrapper} ref={moreRef}>
             <button
@@ -93,7 +101,7 @@ export const ArtifactChips = React.memo(function ArtifactChips({ onGenerate, dis
                 {hiddenChips.map((chip) => (
                   <button
                     key={chip.id}
-                    className={styles.dropdownChip}
+                    className={`${styles.dropdownChip}${existingArtifacts?.has(chip.id) ? ` ${styles.dropdownChipDone}` : ''}`}
                     onClick={() => handleChipClick(chip)}
                     onKeyDown={(e) => {
                       if (e.key === 'Escape') setMoreOpen(false);
@@ -101,6 +109,7 @@ export const ArtifactChips = React.memo(function ArtifactChips({ onGenerate, dis
                     role="option"
                     aria-selected={selectedChipId === chip.id}
                   >
+                    {existingArtifacts?.has(chip.id) && <Check size={14} className={styles.chipCheck} aria-hidden="true" />}
                     {chip.label}
                   </button>
                 ))}

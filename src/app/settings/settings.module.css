@@ -439,9 +439,19 @@
   border-color: var(--outline);
 }
 
+.signOutBtn:active {
+  background: var(--surface-container);
+}
+
 .signOutBtn:disabled {
-  opacity: 0.5;
+  opacity: 0.35;
   cursor: not-allowed;
+  background: none;
+}
+
+.signOutBtn:disabled:hover {
+  background: none;
+  border-color: var(--outline);
 }
 
 .deleteBtn {

@@ -58,6 +58,20 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
+.copyBtn:active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.copyBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.copyBtn:disabled:hover {
+  opacity: 0.3;
+  background: none;
+}
+
 .assistantRow {
   display: flex;
   justify-content: flex-start;
@@ -106,6 +120,20 @@
 .assistantCopyBtn:focus-visible {
   opacity: 1;
   background: var(--surface-container-high);
+}
+
+.assistantCopyBtn:active {
+  background: var(--surface-container);
+}
+
+.assistantCopyBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.assistantCopyBtn:disabled:hover {
+  opacity: 0.3;
+  background: none;
 }
 
 @media (max-width: 768px) {

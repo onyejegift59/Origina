@@ -34,6 +34,10 @@
   color: var(--on-surface);
 }
 
+.navItem:active {
+  background: var(--surface-container);
+}
+
 .navItem:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: -2px;

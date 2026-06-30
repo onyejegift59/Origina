@@ -25,12 +25,32 @@
   user-select: none;
   line-height: 1.4;
   min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .chip:hover {
   border-color: var(--primary);
   color: var(--on-surface);
   background: var(--surface-container-low);
+}
+
+.chipDone {
+  border-color: var(--primary);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.chipDone:hover {
+  border-color: var(--primary);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  opacity: 0.85;
+}
+
+.chipCheck {
+  flex-shrink: 0;
 }
 
 .chip:disabled,
@@ -108,11 +128,22 @@
   text-align: left;
   white-space: nowrap;
   transition: color 150ms, background 150ms;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .dropdownChip:hover {
   background: var(--surface-container-high);
   color: var(--on-surface);
+}
+
+.dropdownChipDone {
+  color: var(--primary);
+}
+
+.dropdownChipDone:hover {
+  color: var(--primary);
 }
 
 .dropdownChip:focus-visible {

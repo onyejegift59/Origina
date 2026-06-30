@@ -51,6 +51,28 @@
   border-radius: 0 var(--radius-lg) 0 0;
 }
 
+/* New badge */
+.newBadge {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-primary);
+  background: var(--primary);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  line-height: 1.4;
+  animation: newPulse 4s ease-out forwards;
+  margin-right: 4px;
+}
+
+@keyframes newPulse {
+  0% { opacity: 1; transform: scale(1); }
+  60% { opacity: 1; transform: scale(1); }
+  85% { opacity: 0.8; transform: scale(0.97); }
+  100% { opacity: 0; transform: scale(0.95); }
+}
+
 /* Toolbar */
 .toolbar {
   display: flex;
@@ -97,9 +119,19 @@
   background: var(--surface-container-high);
 }
 
+.toolbarBtn:active {
+  color: var(--on-surface);
+  background: var(--surface-container);
+}
+
 .toolbarBtn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
+}
+
+.toolbarBtn:disabled:hover {
+  background: none;
+  color: var(--on-surface-variant);
 }
 
 .toolbarBtn:focus-visible {
@@ -256,17 +288,32 @@
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: color 150ms, background 150ms, border-color 150ms;
   min-height: 44px;
   display: flex;
   align-items: center;
   gap: 4px;
+  transition: color 150ms, background 150ms, border-color 150ms, transform 150ms;
 }
 
 .footerBtn:hover {
   color: var(--on-surface);
   background: var(--surface-container-high);
   border-color: var(--outline);
+  transform: translateY(-1px);
+}
+
+.footerBtn:active {
+  background: var(--surface-container);
+  transform: translateY(0);
+}
+
+.footerBtn:disabled {
+  opacity: 0.35;
+  border-color: var(--outline-variant);
+  color: var(--on-surface-variant);
+  background: none;
+  transform: none;
+  cursor: not-allowed;
 }
 
 .footerBtn:focus-visible {
@@ -499,14 +546,26 @@
   font-weight: var(--label-small-font-weight);
   white-space: nowrap;
   cursor: pointer;
-  transition: opacity 150ms;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+  transition: box-shadow 150ms, transform 150ms, background 150ms;
+  will-change: transform;
 }
 
 .refineBtn:hover {
-  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  transform: translateY(-1px);
+}
+
+.refineBtn:active {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+  transform: translateY(0);
 }
 
 .refineBtn:disabled {
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  box-shadow: none;
+  transform: none;
   opacity: 0.5;
   cursor: not-allowed;
 }

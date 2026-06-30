@@ -210,6 +210,11 @@
     color: var(--on-surface);
   }
 
+  .menuBtn:active {
+    background: var(--surface-container-high);
+    color: var(--on-surface);
+  }
+
   .title {
     font-size: var(--title-large-font-size);
   }

@@ -33,8 +33,11 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/signup') ||
     request.nextUrl.pathname.startsWith('/auth');
 
+  const isResetPage = request.nextUrl.pathname === '/reset-password';
+
   const isPublicPage =
     request.nextUrl.pathname === '/' ||
+    isResetPage ||
     isAuthPage;
 
   if (!user && !isPublicPage) {
@@ -53,6 +56,12 @@ export async function updateSession(request: NextRequest) {
   if (user && isAuthPage) {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
+    return NextResponse.redirect(url);
+  }
+
+  if (user && user.app_metadata?.password_reset_required && !isResetPage) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/reset-password';
     return NextResponse.redirect(url);
   }
 

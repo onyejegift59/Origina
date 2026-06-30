@@ -46,6 +46,12 @@ yarn-error.log*
 # agent config
 .agent/
 
+# audit reports
+*AUDIT.md
+*_audit.md
+audit/
+audits/
+
 # debug logs
 *.log
 *.err.txt
